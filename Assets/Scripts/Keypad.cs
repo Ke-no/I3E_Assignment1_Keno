@@ -1,26 +1,31 @@
 using UnityEngine;
+using System.Collections;
 
 public class Keypad : Interactable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField]
     private GameObject door;
-    private bool doorOpen;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // If player spam E, multiple coroutines will start so include this to prevent reopening while is already open
+    private bool isDoorBusy = false;
+    
     //this function is for designing the interaction 
     protected override void Interact()
     {
+        if (!GameManager.Instance.HasAllItems())
+        {
+            Debug.Log("Need all 5 items!");
+            return;
+        }
+        StartCoroutine(OpenDoorTemporarily());
+
+    }
+
+    private IEnumerator OpenDoorTemporarily()
+    {
         Animator anim = door.GetComponent<Animator>();
-        doorOpen = !doorOpen;
-        anim.SetBool("IsOpen", doorOpen);
+        anim.SetBool("IsOpen", true);
+        yield return new WaitForSeconds(5f);
+        anim.SetBool("IsOpen", false);
     }
 }
