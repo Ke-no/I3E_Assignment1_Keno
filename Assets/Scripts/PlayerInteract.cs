@@ -10,7 +10,6 @@ public class PlayerInteract : MonoBehaviour
     private LayerMask mask;
     private PlayerUI playerUI;
 
-
     // Start is called before first frame update
     void Start()
     {
@@ -23,14 +22,13 @@ public class PlayerInteract : MonoBehaviour
     void Update()
     {
         playerUI.UpdateText(string.Empty);
-        //create a ray at the center of the camera, shooting outwards
+        //draw a line in the scene view, represent how far it reaches from the object
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * distance);
         RaycastHit hitInfo;
 
         if(Physics.Raycast(ray, out hitInfo, distance, mask))
         {
-            //Debug.Log("Hit: " + hitInfo.collider.name);
 
             Interactable interactable =
             hitInfo.collider.GetComponentInParent<Interactable>();
