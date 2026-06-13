@@ -1,15 +1,15 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public PlayerUI playerUI;
 
     public int collectedItems = 0;
     public int requiredItems = 5;
     public bool hasEgg = false;
-
-    [SerializeField]
-    private GameObject winPanel;
+    public event Action OnWin;
 
     private void Awake()
     {
@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     public void CollectItem()
     {
         collectedItems++;
-        Debug.Log("Collected: " + collectedItems + "/" + requiredItems);
     }
 
     public bool HasAllItems()
@@ -30,17 +29,14 @@ public class GameManager : MonoBehaviour
     public void CollectEgg()
     {
         hasEgg = true;
-        Debug.Log("Egg collected!");
     }
 
     public void WinGame()
     {
-        Debug.Log("You have escaped the Backrooms!");
+        Debug.Log("You have escaped the floor");
 
-        if (winPanel != null)
-        {
-            winPanel.SetActive(true);
-        }
+        OnWin?.Invoke();
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Time.timeScale = 0f;

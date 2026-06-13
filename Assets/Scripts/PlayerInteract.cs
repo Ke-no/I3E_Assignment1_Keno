@@ -22,7 +22,7 @@ public class PlayerInteract : MonoBehaviour
     void Update()
     {
         playerUI.UpdateText(string.Empty);
-        //draw a line in the scene view, represent how far it reaches from the object
+        // draw line in scene view, represent how far it reaches from the object
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * distance);
         RaycastHit hitInfo;

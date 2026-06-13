@@ -1,24 +1,29 @@
+using System;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHeath = 100;
-    public int currentHealth;
-
-    void Start()
-    {
-        currentHealth = maxHeath;
-    }
+    public int currentHealth = 100;
+    public int maxHealth = 100;
+    public event Action OnDie;
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
-        Debug.Log("Heath: " + currentHealth);
-
-        if (currentHealth <= 0)
+        if(currentHealth <= 0)
         {
-            Debug.Log("Player Died...");
+            currentHealth = 0;
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Player died");
+        OnDie?.Invoke();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 0f;
     }
 }
