@@ -4,16 +4,44 @@ public class DamageHealth : MonoBehaviour
 {
     public int damage = 10;
 
+    public bool continuousDamage = false;
+    public float damageInterval = 1f;
+
+    private float nextDamageTime;
+
+// for one time damage (objects and entities)
     private void OnTriggerEnter(Collider other)
     {
+        if(continuousDamage)
+        return;
+
         PlayerHealth playerHealth = 
             other.GetComponentInParent<PlayerHealth>();
 
         if (playerHealth != null)
         {
-            Destroy(gameObject);
-            Debug.Log("Damaging player!");
             playerHealth.TakeDamage(damage);
+
+            Destroy(gameObject);
+        }
+    }
+
+// for continuous damage (floor on stage 2)
+    private void OnTriggerStay(Collider other)
+    {
+        if(!continuousDamage)
+        return;
+
+        PlayerHealth playerHealth =
+        other.GetComponentInParent<PlayerHealth>();
+
+        if (playerHealth != null)
+        {
+            if (Time.time >= nextDamageTime)
+            {
+                playerHealth.TakeDamage(damage);
+                nextDamageTime = Time.time + damageInterval;
+            }
         }
     }
 }
